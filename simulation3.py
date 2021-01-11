@@ -73,7 +73,21 @@ class simulation:
 
     #For single stock
     def simulate_returns(self, historical_returns, forecast_days):
-        return historical_returns.sample(n=forecast_days, replace=True).reset_index(drop=True)
+        records=pd.DataFrame()
+        while forecast_days>0:
+            record=historical_returns.sample(n=1, replace=True)
+            index=record.index[0]
+
+            if forecast_days-10>0:
+                samples=historical_returns[index:index+10]
+                records=pd.concat([records, samples])
+                forecast_days=forecast_days-10
+            else:
+                samples=historical_returns[index:index+forecast_days]
+                records=pd.concat([records, samples])
+                forecast_days=0
+        records=records.reset_index(drop=True)
+        return records
 
     #For portfilio - only name and weight
     def simulate_portfolio(self, historical_returns, composition, forecast_days):
