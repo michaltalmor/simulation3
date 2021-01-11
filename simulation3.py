@@ -78,12 +78,11 @@ class simulation:
         while forecast_days>0:
             record=historical_returns.sample(n=1, replace=True)
             index=record.index[0]
-
-            if forecast_days-num>0:
+            if forecast_days-num>0:#Receive 10 consecutive days
                 samples=historical_returns[index:index+num]
                 records=pd.concat([records, samples])
                 forecast_days=forecast_days-num
-            else:
+            else:#Get the rest of the days
                 while len(historical_returns)-index<forecast_days:
                     record = historical_returns.sample(n=1, replace=True)
                     index = record.index[0]
@@ -116,6 +115,19 @@ class simulation:
     def get_simulation_mean(self, simulated_portfolios):
         mean_data = simulated_portfolios.mean()*885
         return mean_data
+
+    def total_profit_for_case_2(self,simulation):
+        total_profit=[]
+        for iter in simulation:
+            col=simulation[iter]
+            col= simulation[iter].cumsum()
+            profit=np.mean(col)
+            for prof in col:
+                if prof>0.36:
+                    profit=0.02
+            total_profit.append(profit)
+
+
 
 if __name__ == "__main__":
     SM = simulation()
