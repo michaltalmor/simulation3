@@ -74,15 +74,19 @@ class simulation:
     #For single stock
     def simulate_returns(self, historical_returns, forecast_days):
         records=pd.DataFrame()
+        num= int(forecast_days/10)
         while forecast_days>0:
             record=historical_returns.sample(n=1, replace=True)
             index=record.index[0]
 
-            if forecast_days-10>0:
-                samples=historical_returns[index:index+10]
+            if forecast_days-num>0:
+                samples=historical_returns[index:index+num]
                 records=pd.concat([records, samples])
-                forecast_days=forecast_days-10
+                forecast_days=forecast_days-num
             else:
+                while len(historical_returns)-index<forecast_days:
+                    record = historical_returns.sample(n=1, replace=True)
+                    index = record.index[0]
                 samples=historical_returns[index:index+forecast_days]
                 records=pd.concat([records, samples])
                 forecast_days=0
