@@ -46,7 +46,7 @@ class simulation:
 
 
 
-    def get_covariance_correlation(self):
+    def get_covariance(self):
         # d = data.drop("Date", axis=1)
         d = self.days_profit.copy()
         columns = d.columns
@@ -59,11 +59,11 @@ class simulation:
         ax.set_title('covariance matrix')
         plt.show()
 
-        ax2 = plt.axes()
-        correlation_mat = data.corr()
-        sns.heatmap(correlation_mat, annot=True, ax=ax2)
-        ax2.set_title('correlation matrix')
-        plt.show()
+        # ax2 = plt.axes()
+        # correlation_mat = data.corr()
+        # sns.heatmap(correlation_mat, annot=True, ax=ax2)
+        # ax2.set_title('correlation matrix')
+        # plt.show()
 
     def get_correlation(self):
         data = self.days_profit.copy()
@@ -164,16 +164,18 @@ class simulation:
 
 
 if __name__ == "__main__":
-    Q2_2 = True # For Question 2.2
+    Q2_2 = False # For Question 2.2
     SM = simulation()
     portfolio_composition = SM.portfolio_composition
-    # data = SM.get_portfolio_composition()
+    data = SM.get_portfolio_composition()
     # data.to_csv("data.csv")
-    data = pd.read_csv("data.csv")
-    # SM.get_mean_std()
-    # SM.plot_hist()
-    # SM.get_covariance_correlation()
-    # SM.get_correlation()
+    # data = pd.read_csv("data.csv")
+    """Q1"""
+    SM.get_mean_std()
+    SM.plot_hist()
+    SM.get_covariance()
+    SM.get_correlation()
+    """Q2"""
     simulated_portfolios = SM.simulation(data, portfolio_composition, int(253*3.5), 100, flag=Q2_2)
 
     if(Q2_2): #put 0 instead of negative profit (for Q2.2)
